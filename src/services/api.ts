@@ -35,6 +35,11 @@ export const authService = {
     return response.data;
   },
 
+  async googleAuth(idToken: string): Promise<{ user: User; token: string; created: boolean }> {
+    const response = await api.post('/google-auth/', { id_token: idToken });
+    return response.data;
+  },
+
   async register(username: string, email: string, password: string): Promise<{ user: User; token: string }> {
     const response = await api.post('/register/', { username, email, password });
     return response.data;

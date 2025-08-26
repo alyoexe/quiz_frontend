@@ -48,8 +48,21 @@ export const Header: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-3">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <User className="w-4 h-4" />
-                <span>{user?.username}</span>
+                {user?.picture ? (
+                  <img 
+                    src={user.picture} 
+                    alt={user.name || user.username}
+                    className="w-6 h-6 rounded-full"
+                  />
+                ) : (
+                  <User className="w-4 h-4" />
+                )}
+                <span>{user?.name || user?.username}</span>
+                {user?.auth_method === 'google' && (
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                    Google
+                  </span>
+                )}
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
@@ -83,8 +96,21 @@ export const Header: React.FC = () => {
               ))}
               <div className="pt-2 border-t border-gray-200">
                 <div className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600">
-                  <User className="w-4 h-4" />
-                  <span>{user?.username}</span>
+                  {user?.picture ? (
+                    <img 
+                      src={user.picture} 
+                      alt={user.name || user.username}
+                      className="w-5 h-5 rounded-full"
+                    />
+                  ) : (
+                    <User className="w-4 h-4" />
+                  )}
+                  <span>{user?.name || user?.username}</span>
+                  {user?.auth_method === 'google' && (
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+                      Google
+                    </span>
+                  )}
                 </div>
                 <button
                   onClick={handleLogout}

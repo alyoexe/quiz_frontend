@@ -6,6 +6,7 @@ import { BookOpen, Mail, Lock, User } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
+import { GoogleSignInButton } from '../components/ui/GoogleSignInButton';
 
 interface RegisterForm {
   username: string;
@@ -15,7 +16,7 @@ interface RegisterForm {
 }
 
 export const RegisterPage: React.FC = () => {
-  const { register: registerUser, isLoading } = useAuth();
+  const { register: registerUser, googleLogin, isLoading } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
@@ -34,6 +35,28 @@ export const RegisterPage: React.FC = () => {
       setError(errorMessage);
       toast.error(errorMessage);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: string) => {
+    try {
+      setError('');
+      const { created } = await googleLogin(credentialResponse);
+      if (created) {
+        toast.success('Account created successfully! Welcome to QuizAI!');
+      } else {
+        toast.success('Welcome back!');
+      }
+      navigate('/');
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Google sign-in failed';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google sign-in was cancelled or failed');
+    toast.error('Google sign-in failed');
   };
 
   return (
@@ -160,6 +183,25 @@ export const RegisterPage: React.FC = () => {
                 Create Account
               </Button>
             </form>
+
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+              
+              <div className="mt-6">
+                <GoogleSignInButton
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  text="Sign up with Google"
+                />
+              </div>
+            </div>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600">

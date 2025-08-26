@@ -11,6 +11,7 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   login: (username: string, password: string) => Promise<void>;
+  googleLogin: (idToken: string) => Promise<{ created: boolean }>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 }
@@ -83,6 +84,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const googleLogin = async (idToken: string): Promise<{ created: boolean }> => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+    try {
+      const { user, token, created } = await authService.googleAuth(idToken);
+      localStorage.setItem('token', token);
+      dispatch({ type: 'SET_USER', payload: { user, token } });
+      return { created };
+    } catch (error) {
+      dispatch({ type: 'SET_LOADING', payload: false });
+      throw error;
+    }
+  };
+
   const register = async (username: string, email: string, password: string) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
@@ -101,7 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+    <AuthContext.Provider value={{ ...state, login, googleLogin, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

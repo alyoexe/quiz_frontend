@@ -6,6 +6,7 @@ import { BookOpen, Mail, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
+import { GoogleSignInButton } from '../components/ui/GoogleSignInButton';
 
 interface LoginForm {
   username: string;
@@ -13,7 +14,7 @@ interface LoginForm {
 }
 
 export const LoginPage: React.FC = () => {
-  const { login, isLoading } = useAuth();
+  const { login, googleLogin, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState('');
@@ -33,6 +34,28 @@ export const LoginPage: React.FC = () => {
       setError(errorMessage);
       toast.error(errorMessage);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: string) => {
+    try {
+      setError('');
+      const { created } = await googleLogin(credentialResponse);
+      if (created) {
+        toast.success('Account created successfully! Welcome to QuizAI!');
+      } else {
+        toast.success('Welcome back!');
+      }
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Google sign-in failed';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google sign-in was cancelled or failed');
+    toast.error('Google sign-in failed');
   };
 
   return (
@@ -105,6 +128,25 @@ export const LoginPage: React.FC = () => {
                 Sign In
               </Button>
             </form>
+
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                </div>
+              </div>
+              
+              <div className="mt-6">
+                <GoogleSignInButton
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  text="Sign in with Google"
+                />
+              </div>
+            </div>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600">

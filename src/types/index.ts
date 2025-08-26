@@ -2,6 +2,9 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  name?: string;
+  picture?: string;
+  auth_method?: 'email' | 'google';
 }
 
 export interface Quiz {
