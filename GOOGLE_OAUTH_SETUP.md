@@ -25,12 +25,12 @@ This application supports Google OAuth authentication alongside traditional emai
 
 1. Copy `.env.example` to `.env.local`:
    ```bash
-   cp .env.example .env.local
+   
    ```
 
 2. Update `.env.local` with your Google Client ID:
    ```
-   REACT_APP_GOOGLE_CLIENT_ID=your-google-oauth-client-id-here
+   VITE_GOOGLE_CLIENT_ID=your-google-oauth-client-id-here
    ```
 
 ### 3. Backend API Integration

@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-3">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
+              <Link to="/profile" className="flex items-center space-x-2 text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200 p-2 rounded-md hover:bg-gray-100">
                 {user?.picture ? (
                   <img 
                     src={user.picture} 
@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
                     Google
                   </span>
                 )}
-              </div>
+              </Link>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -95,7 +95,11 @@ export const Header: React.FC = () => {
                 </Link>
               ))}
               <div className="pt-2 border-t border-gray-200">
-                <div className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600">
+                <Link
+                  to="/profile"
+                  className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   {user?.picture ? (
                     <img 
                       src={user.picture} 
@@ -111,7 +115,7 @@ export const Header: React.FC = () => {
                       Google
                     </span>
                   )}
-                </div>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="flex items-center space-x-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md w-full text-left"
